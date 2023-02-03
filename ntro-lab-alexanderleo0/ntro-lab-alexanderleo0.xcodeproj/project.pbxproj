@@ -9,21 +9,29 @@
 /* Begin PBXBuildFile section */
 		7B34EDBA298D932200867D0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B34EDB9298D932200867D0F /* AppDelegate.swift */; };
 		7B34EDBC298D932200867D0F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B34EDBB298D932200867D0F /* SceneDelegate.swift */; };
-		7B34EDBE298D932200867D0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B34EDBD298D932200867D0F /* ViewController.swift */; };
+		7B34EDBE298D932200867D0F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B34EDBD298D932200867D0F /* MainViewController.swift */; };
 		7B34EDC4298D932200867D0F /* ntro_lab_alexanderleo0.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7B34EDC2298D932200867D0F /* ntro_lab_alexanderleo0.xcdatamodeld */; };
 		7B34EDC6298D932300867D0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B34EDC5298D932300867D0F /* Assets.xcassets */; };
 		7B34EDC9298D932300867D0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B34EDC7298D932300867D0F /* LaunchScreen.storyboard */; };
+		7B92FE74298D93FE0085A2E3 /* MainView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B92FE73298D93FE0085A2E3 /* MainView.xib */; };
+		7B92FE77298D9C940085A2E3 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B92FE76298D9C940085A2E3 /* News.swift */; };
+		7B92FE79298DA3FE0085A2E3 /* NewsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B92FE78298DA3FE0085A2E3 /* NewsCell.xib */; };
+		7B92FE7B298DA5260085A2E3 /* CellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B92FE7A298DA5260085A2E3 /* CellViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7B34EDB6298D932200867D0F /* ntro-lab-alexanderleo0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ntro-lab-alexanderleo0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B34EDB9298D932200867D0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7B34EDBB298D932200867D0F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		7B34EDBD298D932200867D0F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7B34EDBD298D932200867D0F /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		7B34EDC3298D932200867D0F /* ntro_lab_alexanderleo0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ntro_lab_alexanderleo0.xcdatamodel; sourceTree = "<group>"; };
 		7B34EDC5298D932300867D0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7B34EDC8298D932300867D0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7B34EDCA298D932300867D0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7B92FE73298D93FE0085A2E3 /* MainView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainView.xib; sourceTree = "<group>"; };
+		7B92FE76298D9C940085A2E3 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
+		7B92FE78298DA3FE0085A2E3 /* NewsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsCell.xib; sourceTree = "<group>"; };
+		7B92FE7A298DA5260085A2E3 /* CellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CellViewController.swift; path = "ntro-lab-alexanderleo0/Controllers/CellViewController.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,13 +66,41 @@
 			children = (
 				7B34EDB9298D932200867D0F /* AppDelegate.swift */,
 				7B34EDBB298D932200867D0F /* SceneDelegate.swift */,
-				7B34EDBD298D932200867D0F /* ViewController.swift */,
+				7B34EDD2298D93A200867D0F /* Views */,
+				7B92FE75298D9C7B0085A2E3 /* Models */,
+				7B92FE72298D93CD0085A2E3 /* Controllers */,
 				7B34EDC5298D932300867D0F /* Assets.xcassets */,
 				7B34EDC7298D932300867D0F /* LaunchScreen.storyboard */,
 				7B34EDCA298D932300867D0F /* Info.plist */,
 				7B34EDC2298D932200867D0F /* ntro_lab_alexanderleo0.xcdatamodeld */,
 			);
 			path = "ntro-lab-alexanderleo0";
+			sourceTree = "<group>";
+		};
+		7B34EDD2298D93A200867D0F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7B92FE73298D93FE0085A2E3 /* MainView.xib */,
+				7B92FE78298DA3FE0085A2E3 /* NewsCell.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7B92FE72298D93CD0085A2E3 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7B92FE7A298DA5260085A2E3 /* CellViewController.swift */,
+				7B34EDBD298D932200867D0F /* MainViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		7B92FE75298D9C7B0085A2E3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7B92FE76298D9C940085A2E3 /* News.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,7 +161,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B92FE74298D93FE0085A2E3 /* MainView.xib in Resources */,
 				7B34EDC9298D932300867D0F /* LaunchScreen.storyboard in Resources */,
+				7B92FE79298DA3FE0085A2E3 /* NewsCell.xib in Resources */,
 				7B34EDC6298D932300867D0F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,9 +175,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B34EDBE298D932200867D0F /* ViewController.swift in Sources */,
+				7B92FE7B298DA5260085A2E3 /* CellViewController.swift in Sources */,
+				7B34EDBE298D932200867D0F /* MainViewController.swift in Sources */,
 				7B34EDBA298D932200867D0F /* AppDelegate.swift in Sources */,
 				7B34EDBC298D932200867D0F /* SceneDelegate.swift in Sources */,
+				7B92FE77298D9C940085A2E3 /* News.swift in Sources */,
 				7B34EDC4298D932200867D0F /* ntro_lab_alexanderleo0.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -208,7 +248,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -262,7 +302,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -283,8 +323,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ntro-lab-alexanderleo0/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -312,8 +352,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ntro-lab-alexanderleo0/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
