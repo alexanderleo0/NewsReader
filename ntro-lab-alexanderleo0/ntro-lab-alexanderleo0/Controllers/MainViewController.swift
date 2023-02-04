@@ -7,75 +7,29 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, NetworkManagerDelegate {
+
     
     @IBOutlet weak var tableView: UITableView!
     
-    var news : [News] = []
+    var networkManager = NetworkManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .red
-        title = "MainVC"
-        
+        //Тут настраиваем работу и вид таблички
+        title = "Apple NEWS"
         tableView.delegate = self
         tableView.dataSource = self
-        
         tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
-//        tableView.rowHeight = UITableView.automaticDimension
         
-        fetchData()
+        //Настраиваем и запускаем сетевого менеджера, что бы получить новости и картинки
+        networkManager.delegate = self
+        networkManager.fetchNews()
     }
     
-    func fetchData() {
-        if let url = URL(string: "https://newsapi.org/v2/everything?q=apple&pageSize=20&sortBy=popularity&apiKey=4655c692109143a0a81ced3d538d5a95") {
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { data, response, error in
-                if error == nil {
-                    let decoder = JSONDecoder()
-                    if let data = data {
-                        do {
-                            let results = try decoder.decode(ListOfNews.self, from: data)
-                            self.news = results.articles
-                            self.addImgs()
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            }
-                            //                            print(self.news)
-                        } catch {
-                            print(error)
-                        }
-                    }
-                }
-            }
-            task.resume()
-        }
-
-    }
-    
-    func addImgs(){
-        for (index, oneNews) in self.news.enumerated() {
-            print("Start download img")
-            if let url = URL(string: oneNews.urlToImage) {
-                let imgSession = URLSession(configuration: .default)
-                let dataTask = imgSession.dataTask(with: url) {  data, response, error in
-                    if let data = data {
-//                        print(data)
-                        print(response?.suggestedFilename ?? url.lastPathComponent)
-                        print("Download Finished")
-                        if let img = UIImage(data: data) {
-                            self.news[index].image = img
-                            
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            }
-                        }
-                    }
-                }
-                dataTask.resume()
-            }
-        }
+    func updateData() {
+        tableView.reloadData()
     }
 }
 
@@ -87,34 +41,25 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return news.count
+        return networkManager.news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! CellViewController
-        cell.newsTitle.text = news[indexPath.row].title
-        cell.newsReadCounter.text = "\(news[indexPath.row].readCounter)"
-//        cell.newsImage.sizeToFit()
-//        cell.newsImage.layoutIfNeeded()
-      
-        cell.newsImage.image = news[indexPath.row].image
-    
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! CellViewController
+        cell.newsTitle.text = networkManager.news[indexPath.row].title
+        cell.newsReadCounter.text = "\(networkManager.news[indexPath.row].readCounter)"
+        cell.newsImage.image = networkManager.news[indexPath.row].image
         return cell
     }
-    
-    
-    
-    
 }
 
-extension UIColor {
-    static var random: UIColor {
-        return UIColor(
-            red: .random(in: 0...1),
-            green: .random(in: 0...1),
-            blue: .random(in: 0...1),
-            alpha: 1.0
-        )
-    }
-}
+//extension UIColor {
+//    static var random: UIColor {
+//        return UIColor(
+//            red: .random(in: 0...1),
+//            green: .random(in: 0...1),
+//            blue: .random(in: 0...1),
+//            alpha: 1.0
+//        )
+//    }
+//}

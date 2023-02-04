@@ -17,6 +17,7 @@
 		7B92FE77298D9C940085A2E3 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B92FE76298D9C940085A2E3 /* News.swift */; };
 		7B92FE79298DA3FE0085A2E3 /* NewsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7B92FE78298DA3FE0085A2E3 /* NewsCell.xib */; };
 		7B92FE7B298DA5260085A2E3 /* CellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B92FE7A298DA5260085A2E3 /* CellViewController.swift */; };
+		7B92FE7D298E32260085A2E3 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B92FE7C298E32260085A2E3 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		7B92FE76298D9C940085A2E3 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		7B92FE78298DA3FE0085A2E3 /* NewsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsCell.xib; sourceTree = "<group>"; };
 		7B92FE7A298DA5260085A2E3 /* CellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CellViewController.swift; path = "ntro-lab-alexanderleo0/Controllers/CellViewController.swift"; sourceTree = SOURCE_ROOT; };
+		7B92FE7C298E32260085A2E3 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				7B92FE76298D9C940085A2E3 /* News.swift */,
+				7B92FE7C298E32260085A2E3 /* NetworkManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 				7B92FE7B298DA5260085A2E3 /* CellViewController.swift in Sources */,
 				7B34EDBE298D932200867D0F /* MainViewController.swift in Sources */,
 				7B34EDBA298D932200867D0F /* AppDelegate.swift in Sources */,
+				7B92FE7D298E32260085A2E3 /* NetworkManager.swift in Sources */,
 				7B34EDBC298D932200867D0F /* SceneDelegate.swift in Sources */,
 				7B92FE77298D9C940085A2E3 /* News.swift in Sources */,
 				7B34EDC4298D932200867D0F /* ntro_lab_alexanderleo0.xcdatamodeld in Sources */,
