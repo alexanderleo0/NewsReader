@@ -13,10 +13,42 @@ class NetworkManager {
     var news : [News] = []
     
     var delegate: NetworkManagerDelegate?
+    let defaults = UserDefaults.standard
+    
+    
+    func saveNews(){
+        print("START SAVING")
+        let encoder = JSONEncoder()
+        defaults.set(news.count, forKey: "count")
+        for (index, oneNews) in news.enumerated() {
+            if let encoded = try? encoder.encode(oneNews) {
+                defaults.set(encoded, forKey: "\(index)")
+            }
+        }
+    }
+    
+    func loadNews(){
+        print("START LOADING")
+        news = []
+        let count = defaults.object(forKey: "count") as? Int
+        if let count = count {
+            for index in 0...count {
+                if let oneNews = defaults.object(forKey: "\(index)") as? Data {
+                    let decoder = JSONDecoder()
+                    if let loadingNews = try? decoder.decode(News.self, from: oneNews) {
+                        print(loadingNews.image.hashValue)
+                        news.append(loadingNews)
+                    }
+                }
+            }
+            delegate?.updateData()
+        }
+    }
     
     func fetchNews() {
-        print("Start fetching news")
-        if let url = URL(string: "https://newsapi.org/v2/everything?q=apple&pageSize=20&sortBy=popularity&apiKey=4655c692109143a0a81ced3d538d5a95") {
+        
+        //        print("Start fetching news")
+        if let url = URL(string: "https://newsapi.org/v2/top-headlines?country=gb&apiKey=4655c692109143a0a81ced3d538d5a95") {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { data, response, error in
                 if error == nil {
@@ -27,13 +59,13 @@ class NetworkManager {
                             self.news = results.articles
                             self.fetchImgs()
                             DispatchQueue.main.async {
-//                                self.tableView.reloadData()
+                                //                                self.tableView.reloadData()
                                 self.delegate?.updateData()
-                                print(self.news.count)
+                                self.saveNews()
                             }
                         } catch {
                             // Написать красивый обработчик ошибки загрузки данных из сети
-                            print(error)
+                            //                            print(error)
                         }
                     }
                 }
@@ -44,7 +76,7 @@ class NetworkManager {
     
     private func fetchImgs(){
         for (index, oneNews) in self.news.enumerated() {
-            if let url = URL(string: oneNews.urlToImage) {
+            if let urlToImg = oneNews.urlToImage, let url = URL(string: urlToImg) {
                 let session = URLSession(configuration: .default)
                 let task = session.dataTask(with: url) {  data, response, error in
                     if error == nil {
@@ -52,8 +84,8 @@ class NetworkManager {
                             if let img = UIImage(data: data) {
                                 self.news[index].image = img
                                 DispatchQueue.main.async {
-//                                    self.tableView.reloadData()
                                     self.delegate?.updateData()
+                                    self.saveNews()
                                 }
                             }
                         }

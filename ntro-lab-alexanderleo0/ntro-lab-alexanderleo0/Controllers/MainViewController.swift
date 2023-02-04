@@ -16,16 +16,29 @@ class MainViewController: UIViewController, NetworkManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        networkManager.loadNews()
         //Тут настраиваем работу и вид таблички
-        title = "Apple NEWS"
+        title = "NEWS"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
         
+        //Добавляем pulltorefresh
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(updateNews), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        
         //Настраиваем и запускаем сетевого менеджера, что бы получить новости и картинки
         networkManager.delegate = self
         networkManager.fetchNews()
+//        print("Понеслась")
+    }
+    
+    
+    @objc func updateNews(sender: UIRefreshControl){
+//        print("printSomewhting")
+        networkManager.fetchNews()
+        sender.endRefreshing()
     }
     
     func updateData() {
@@ -51,15 +64,15 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
         cell.newsImage.image = networkManager.news[indexPath.row].image
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let detailVC = DetailViewController()
+        detailVC.news = networkManager.news[indexPath.row]
+        
+        self.navigationController?.pushViewController(detailVC, animated: true)
+        networkManager.news[indexPath.row].readCounter += 1
+        tableView.reloadRows(at: [indexPath], with: .none)
+    }
+    
 }
-
-//extension UIColor {
-//    static var random: UIColor {
-//        return UIColor(
-//            red: .random(in: 0...1),
-//            green: .random(in: 0...1),
-//            blue: .random(in: 0...1),
-//            alpha: 1.0
-//        )
-//    }
-//}

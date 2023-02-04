@@ -12,7 +12,7 @@ class CellViewController: UITableViewCell {
     
     @IBOutlet weak var newsTitle: UILabel!
     @IBOutlet weak var newsReadCounter: UILabel!
-    @IBOutlet weak var newsImage: UIImageView!
+    @IBOutlet weak var newsImage: ScaledHeightImageView!
     
     
     override func awakeFromNib() {
