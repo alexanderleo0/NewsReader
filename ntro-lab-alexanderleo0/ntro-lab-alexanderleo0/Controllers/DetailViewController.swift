@@ -22,12 +22,13 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let news = news {
-            imageView.image = news.image
+        if let news = news, let dataImage = news.image {
+            
+            imageView.image = UIImage(data: dataImage)
             
             newsTitle.text = news.title
             newsDescription.text = news.description
-            publicationDate.text = news.publishDate
+            publicationDate.text = news.publishedAt?.components(separatedBy: "T")[0]
             publicationSource.text = news.source.name
             urlButton.contentHorizontalAlignment = .left
             urlButton.setTitle(news.url, for: .normal)

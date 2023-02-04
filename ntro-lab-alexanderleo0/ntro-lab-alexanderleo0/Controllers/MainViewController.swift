@@ -61,7 +61,12 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! CellViewController
         cell.newsTitle.text = networkManager.news[indexPath.row].title
         cell.newsReadCounter.text = "\(networkManager.news[indexPath.row].readCounter)"
-        cell.newsImage.image = networkManager.news[indexPath.row].image
+        if let dataImage = networkManager.news[indexPath.row].image {
+            cell.newsImage.image = UIImage(data: dataImage)
+        } else {
+            cell.newsImage.image = UIImage(named: "noImg")
+        }
+        
         return cell
     }
     
@@ -73,6 +78,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
         self.navigationController?.pushViewController(detailVC, animated: true)
         networkManager.news[indexPath.row].readCounter += 1
         tableView.reloadRows(at: [indexPath], with: .none)
+//        networkManager.loadNews()
     }
     
 }
