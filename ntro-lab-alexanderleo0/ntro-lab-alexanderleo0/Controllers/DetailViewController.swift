@@ -19,13 +19,12 @@ class DetailViewController: UIViewController {
     
     var news : News?
     let webView = WKWebView()
+    var image: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let news = news, let dataImage = news.image {
-            
-            imageView.image = UIImage(data: dataImage)
-            
+
+        if let news = news{
             newsTitle.text = news.title
             newsDescription.text = news.description
             publicationDate.text = news.publishedAt?.components(separatedBy: "T")[0]
@@ -34,6 +33,8 @@ class DetailViewController: UIViewController {
             urlButton.setTitle(news.url, for: .normal)
            
         }
+        imageView.image = image
+        
         // Do any additional setup after loading the view.
     }
     
@@ -54,7 +55,7 @@ class ScaledHeightImageView: UIImageView {
 
     override var intrinsicContentSize: CGSize {
 
-        if let myImage = self.image {
+        if let myImage = image {
             let myImageWidth = myImage.size.width
             let myImageHeight = myImage.size.height
             let myViewWidth = self.frame.size.width

@@ -11,103 +11,132 @@ import UIKit
 class NetworkManager {
     
     var news : [News] = []
+    var newsReadCounter = [String:Int]()
+    var imagesForNews = [String:Data]()
     
     var delegate: NetworkManagerDelegate?
     let defaults = UserDefaults.standard
+    //
+    func saveReadingCounter (){
+        defaults.set(newsReadCounter, forKey: "newsReadCounter")
+    }
     
-    func saveNews(){
-        print("START SAVING")
+    func saveImages(){
+        print("SAVE IMAGES")
+        defaults.set(imagesForNews, forKey: "imagesForNews")
+    }
+    
+    func saveTextNews(){
         let encoder = JSONEncoder()
-        defaults.set(news.count, forKey: "count")
-        for (index, oneNews) in news.enumerated() {
-            if let encoded = try? encoder.encode(oneNews) {
-                defaults.set(encoded, forKey: "\(index)")
-                defaults.set(oneNews.image, forKey: "\(index)Image")
-                defaults.set(oneNews.readCounter, forKey: "\(index)Counter")
-            }
-//            let decoder = JSONDecoder()
-//            if let loadingNews = try? decoder.decode(News.self, from: oneNews) {
-//                print(loadingNews.image)
-//                news.append(loadingNews)
-//            }
+        defaults.set(newsReadCounter, forKey: "newsReadCounter")
+        if let encoded = try? encoder.encode(news) {
+            defaults.set(encoded, forKey: "news")
+            print("SAVED")
         }
     }
+    
     
     func loadNews(){
         print("START LOADING")
         news = []
-        let count = defaults.object(forKey: "count") as? Int
-        if let count = count {
-            for index in 0...count {
-                if let oneNews = defaults.object(forKey: "\(index)") as? Data {
-                    let decoder = JSONDecoder()
-                    if var loadingNews = try? decoder.decode(News.self, from: oneNews) {
-//                        print(loadingNews.image)
-//                        print(loadingNews.title)
-                        if let imgData = defaults.object(forKey: "\(index)Image") as? Data {
-                            loadingNews.image = imgData
-                            print(loadingNews.image)
-                        }
-                        if let counter = defaults.object(forKey: "\(index)Counter") as? Int {
-                            loadingNews.readCounter = counter
-                            print(loadingNews.readCounter)
-                        }
-                        news.append(loadingNews)
-                    }
-                }
-            }
-            delegate?.updateData()
+        if let newsRC = defaults.object(forKey: "newsReadCounter") as? [String:Int] {
+            self.newsReadCounter = newsRC
+            print("LOAD newsReadCounter")
+//            print(newsReadCounter)
         }
+        if let imgsFN = defaults.object(forKey: "imagesForNews") as? [String:Data] {
+            self.imagesForNews = imgsFN
+            print("LOAD imagesForNews")
+//            print(imagesForNews)
+        }
+        if let loadDataNews = defaults.object(forKey: "news") as? Data {
+            let decoder = JSONDecoder()
+            if let loadNews = try? decoder.decode([News].self, from: loadDataNews) {
+                self.news = loadNews
+                print("LOAD")
+                delegate?.updateData()
+                self.fetchNews(isPagination: false)
+            }
+        }
+
     }
     
-    func fetchNews() {
-        print("Start fetching news")
-        if let url = URL(string: "https://newsapi.org/v2/top-headlines?country=gb&apiKey=4655c692109143a0a81ced3d538d5a95") {
+    var fetchIsStarting = false
+    func fetchNews(isPagination: Bool) {
+       
+        if fetchIsStarting {
+            return
+        }else {
+            print("Start Fetch Data")
+            fetchIsStarting = true
+        }
+        print("NEWS COUNT =>>>>>> \(news.count)")
+        var urlString: String!
+        if isPagination {
+        
+            urlString = "https://newsapi.org/v2/everything?q=us&pageSize=20&page=\(news.count/20+1)&apiKey=4655c692109143a0a81ced3d538d5a95"
+            print(urlString)
+        } else {
+            urlString = "https://newsapi.org/v2/everything?q=us&pageSize=20&apiKey=4655c692109143a0a81ced3d538d5a95"
+            print(urlString)
+        }
+        if let url = URL(string: urlString) {
+
             let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { data, response, error in
+            let task = session.dataTask(with: url) {[weak self] data, response, error in
                 if error == nil {
                     let decoder = JSONDecoder()
                     if let data = data {
                         do {
                             let results = try decoder.decode(ListOfNews.self, from: data)
-                            self.news = results.articles
-                            self.fetchImgs()
-                            self.saveNews()
+                            if isPagination {
+                                self?.news.append(contentsOf: results.articles)
+                            } else {
+                                self?.news = results.articles
+                                print(self?.news.count)
+                            }
+                            self?.saveTextNews()
+                            self?.fetchImgs(news: results.articles)
+                            
                             DispatchQueue.main.async {
-                                //                                self.tableView.reloadData()
-                                self.delegate?.updateData()
-                                
+                                self?.fetchIsStarting = false
+                                self?.delegate?.updateData()
                             }
                         } catch {
                             // Написать красивый обработчик ошибки загрузки данных из сети
-                            print(error)
+                            //                            print(error)
                         }
                     }
                 } else {
+                    print("Error with SESSION")
+                    self?.fetchIsStarting = false
                     //                    print(error)
                 }
             }
             task.resume()
+        } else {
+            print("Error with URL")
+            self.fetchIsStarting = false
         }
+        
     }
     
-    private func fetchImgs(){
-        for (index, oneNews) in self.news.enumerated() {
+    private func fetchImgs(news: [News]){
+        for oneNews in news {
             if let urlToImg = oneNews.urlToImage, let url = URL(string: urlToImg) {
-                let session = URLSession(configuration: .default)
-                let task = session.dataTask(with: url) {  data, response, error in
-                    if error == nil {
-                        if let data = data {
-                            self.news[index].image = data
-                            self.saveNews()
+                if !imagesForNews.keys.contains(urlToImg){
+                    let session = URLSession(configuration: .default)
+                    let task = session.dataTask(with: url) {[weak self]  data, response, error in
+                        if let data = data, error == nil {
+                            self?.imagesForNews[urlToImg] = data
+                            self?.saveImages()
                             DispatchQueue.main.async {
-                                self.delegate?.updateData()
+                                self?.delegate?.updateData()
                             }
                         }
-                        
                     }
+                    task.resume()
                 }
-                task.resume()
             }
         }
     }
