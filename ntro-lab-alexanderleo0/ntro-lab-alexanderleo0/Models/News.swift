@@ -8,13 +8,11 @@
 import Foundation
 import UIKit
 
-struct ListOfNews : Decodable{
-    
+struct ListOfNews : Codable{
     let articles : [News]
 }
 
 struct News : Codable {
-//    let id: UUID = UUID()
     let author : String?
     let title : String?
     let description : String?
@@ -22,11 +20,6 @@ struct News : Codable {
     let urlToImage: String?
     let publishedAt : String?
     let source: NewsSource
-//    var image : Data?
-    
-//    private enum CodingKeys: String, CodingKey {
-//           case author, title, description, url, urlToImage, publishedAt, source
-//       }
 }
 
 struct NewsSource: Codable {

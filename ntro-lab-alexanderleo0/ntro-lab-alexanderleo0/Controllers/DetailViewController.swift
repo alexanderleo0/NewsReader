@@ -23,7 +23,8 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        //готовим вид ячейки
         if let news = news{
             newsTitle.text = news.title
             newsDescription.text = news.description
@@ -31,26 +32,20 @@ class DetailViewController: UIViewController {
             publicationSource.text = news.source.name
             urlButton.contentHorizontalAlignment = .left
             urlButton.setTitle(news.url, for: .normal)
-           
         }
         imageView.image = image
-        
-        // Do any additional setup after loading the view.
     }
     
-
+    // Показываем ВебВью, если нажали на ссылку
     @IBAction func runWebView(_ sender: Any) {
-        
         let webViewVC = WebViewVC()
         webViewVC.urlString = news?.url
         navigationController?.show(webViewVC, sender: nil)
-//        navigationController?.pushViewController(webViewVC, animated: true)
-//        present(webViewVC, animated: true)
-        
     }
-    
 }
 
+
+// Создаем новый класс, что бы было удобно работать с картинками
 class ScaledHeightImageView: UIImageView {
 
     override var intrinsicContentSize: CGSize {
@@ -59,13 +54,10 @@ class ScaledHeightImageView: UIImageView {
             let myImageWidth = myImage.size.width
             let myImageHeight = myImage.size.height
             let myViewWidth = self.frame.size.width
- 
             let ratio = myViewWidth/myImageWidth
             let scaledHeight = myImageHeight * ratio
-
             return CGSize(width: myViewWidth, height: scaledHeight)
         }
-
         return CGSize(width: -1.0, height: -1.0)
     }
 

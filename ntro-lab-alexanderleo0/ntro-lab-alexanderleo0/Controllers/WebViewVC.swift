@@ -14,30 +14,22 @@ class WebViewVC: UIViewController {
     var urlString: String? 
     
     override func loadView() {
+        // Подготавливаем наш ВебВью
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         view = webView
         
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        // заставлем его работать
+        webView.frame = view.bounds
         if let urlString = self.urlString, let url = URL(string: urlString){
             let myRequest = URLRequest(url: url)
             self.webView.load(myRequest)
         }
-        webView.frame = view.bounds
+        
     }
-    
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }
