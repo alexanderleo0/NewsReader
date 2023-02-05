@@ -73,9 +73,9 @@ class NetworkManager {
         var urlString: String!
         if isPagination {
 //            print("Запрашиваем новости со страницы =======================>\(news.count/20+1)" )
-            urlString = "https://newsapi.org/v2/everything?q=us&pageSize=20&page=\(news.count/20+1)&apiKey=4655c692109143a0a81ced3d538d5a95"
+            urlString = "https://newsapi.org/v2/everything?q=tinkoff&pageSize=20&page=\(news.count/20+1)&sortBy=publishedAt&apiKey=4655c692109143a0a81ced3d538d5a95"
         } else {
-            urlString = "https://newsapi.org/v2/everything?q=us&pageSize=20&apiKey=4655c692109143a0a81ced3d538d5a95"
+            urlString = "https://newsapi.org/v2/everything?q=tinkoff&pageSize=20&sortBy=publishedAt&apiKey=4655c692109143a0a81ced3d538d5a95"
         }
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
