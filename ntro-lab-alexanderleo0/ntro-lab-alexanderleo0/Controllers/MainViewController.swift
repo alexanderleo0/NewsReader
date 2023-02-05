@@ -96,10 +96,12 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
             detailVC.image = UIImage(data: imgData)
         }
         //Если у нас есть уже счетчик, то прибавляем 1, если нет, то саписываем его
-        if networkManager.newsReadCounter[networkManager.news[indexPath.row].title!] != nil {
-            networkManager.newsReadCounter[networkManager.news[indexPath.row].title!]! += 1
-        } else {
-            networkManager.newsReadCounter[networkManager.news[indexPath.row].title!] = 1
+        if let newsTitle = networkManager.news[indexPath.row].title {
+            if networkManager.newsReadCounter[newsTitle] != nil {
+                networkManager.newsReadCounter[newsTitle]! += 1
+            } else {
+                networkManager.newsReadCounter[newsTitle] = 1
+            }
         }
         networkManager.saveReadingCounter()
         navigationController?.pushViewController(detailVC, animated: true)
