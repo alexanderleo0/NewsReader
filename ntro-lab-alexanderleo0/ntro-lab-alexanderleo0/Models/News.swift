@@ -12,7 +12,8 @@ struct ListOfNews : Codable{
     let articles : [News]
 }
 
-struct News : Codable {
+class News : Codable {
+
     let author : String?
     let title : String?
     let description : String?
@@ -25,4 +26,9 @@ struct News : Codable {
 struct NewsSource: Codable {
     let id : String?
     let name : String?
+}
+
+class News_counter: Codable {
+    static let shared = News_counter()
+    var counter : [String : Int] = [:]
 }

@@ -2,7 +2,7 @@
 //  News_ent+CoreDataProperties.swift
 //  ntro-lab-alexanderleo0
 //
-//  Created by Александр Никитин on 17.02.2023.
+//  Created by Александр Никитин on 19.02.2023.
 //
 //
 
@@ -16,15 +16,13 @@ extension News_ent {
         return NSFetchRequest<News_ent>(entityName: "News_ent")
     }
 
-    @NSManaged public var author: String?
-    @NSManaged public var title: String?
     @NSManaged public var descript: String?
-    @NSManaged public var urlToImage: String?
-    @NSManaged public var url: String?
+    @NSManaged public var image: Data?
+    @NSManaged public var readCounter: Int32
     @NSManaged public var publishedAt: Date?
-    @NSManaged public var source_id: String?
-    @NSManaged public var newsReadCounter: Int32
-    @NSManaged public var imagesForNews: Data?
+    @NSManaged public var title: String?
+    @NSManaged public var url: String?
+    @NSManaged public var urlToImage: String?
 
 }
 

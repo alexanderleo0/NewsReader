@@ -2,7 +2,7 @@
 //  News_ent+CoreDataClass.swift
 //  ntro-lab-alexanderleo0
 //
-//  Created by Александр Никитин on 17.02.2023.
+//  Created by Александр Никитин on 19.02.2023.
 //
 //
 
