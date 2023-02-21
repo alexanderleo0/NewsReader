@@ -14,51 +14,60 @@ class MainViewController: UIViewController, NetworkManagerDelegate {
     
     var networkManager = NetworkManager.shared
     let refreshControl = UIRefreshControl()
-    var newsPage = 1
+//    var newsPage = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Тут настраиваем работу и вид таблички
-        title = "NEWS"
+        title = networkManager.searchString
         tableView.delegate = self
         tableView.dataSource = self
-        // регистрируем новую ячейку с новостями
-        tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
         
-        //Добавляем pulltorefresh
+        tableView.register(UINib(nibName: "NewsCell", bundle: nil), forCellReuseIdentifier: "NewsCell")
+        tableView.register(UINib(nibName: "LoadingCell", bundle: nil), forCellReuseIdentifier: "LoadingCell")
+
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
         
-        //Настраиваем и запускаем сетевого менеджера, что бы получить новости и картинки
         networkManager.delegate = self
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "plus.magnifyingglass"), style: .plain, target: self, action:  #selector(changeSearchString))
+//        UIBarButtonItem(title: "Drop", style: .plain, target: self, action: #selector(resetData))
+    }
+    
+    @objc func changeSearchString(){
+        let alertController = UIAlertController(title: "Ключевые слова", message: "По каким ключевым словам будем искать новости?", preferredStyle: .alert)
+        let action = UIAlertAction.init(title: "Искать", style: .default) {_ in
+            let searchText = alertController.textFields![0].text
+            self.networkManager.searchString = searchText ?? "russia"
+            self.networkManager.fetchNews()
+            self.title = searchText ?? "russia"
+        }
+        alertController.addTextField()
+        alertController.addAction(action)
+        present(alertController, animated: true)
+        
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Drop", style: .plain, target: self, action: #selector(resetData))
     }
-    
-    @objc func resetData(){
-        networkManager.dropObjectsFromCoreData()
-        tableView.reloadData()
-    }
-    
-    // просто пробуем еще раз запросить новости
+
     @objc func pullToRefresh(sender: UIRefreshControl){
         print("Потянули для обновления")
-        
         networkManager.fetchNews()
     }
     
-    //Методы делегата нашего манагера
-    func updateData() {
+
+    func updateData(isUpdate: Bool) {
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            if isUpdate {
+                self.tableView.reloadData()
+            }
             self.refreshControl.endRefreshing()
             self.tableView.tableFooterView = nil
         }
     }
     
     func fetchError(title: String, text: String) {
-        //Так как нам прилетают ошибки из замыкания, кидаем все в основной поток
+
         DispatchQueue.main.async {
             let alert = UIAlertController(title: title, message: text, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -71,106 +80,65 @@ class MainViewController: UIViewController, NetworkManagerDelegate {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return networkManager.curentNews.count
-        if networkManager.curentNews.count / 20 >= section {
-            print(20)
-            return 20
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if networkManager.fatchedNews.count == 0 {
+            return 1
         } else {
-            print(networkManager.curentNews.count - newsPage * 20)
-            return networkManager.curentNews.count - newsPage * 20
+            return 2
+            
         }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return networkManager.fatchedNews.count
+        }
+        else {
+            return 1
+        }
+  
     }
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return newsPage
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! CellViewController
+            let oneNews = networkManager.fatchedNews[indexPath.row]
+            cell.newsTitle.text = oneNews.title
+            if let imgData = oneNews.imageData {
+                cell.newsImage.image = UIImage(data: imgData)
+            } else {
+                cell.newsImage.image = UIImage(named: "noImg")
+            }
+            cell.newsReadCounter.text = "\(News_counter.shared.counter[oneNews.title ?? ""] ?? 0)"
+            return cell
+        }
+        else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LoadingCell", for: indexPath) as! LoadingCell
+            cell.activityContoller.startAnimating()
+            return cell
+        }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! CellViewController
-        let oneNews = networkManager.curentNews[indexPath.row]
-        cell.newsTitle.text = oneNews.title
-        if let img = oneNews.image {
-            print(img)
-            cell.newsImage.image = UIImage(data: img)
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            networkManager.fetchNews(isPaging: true)
         }
-        
-    
-        
-        
-//        cell.newsImage.image = UIImage(data: ()!)
-        
-        
-        //        let oneNews = networkManager.all_news[indexPath.row]
-        
-        
-        //        cell.newsReadCounter = networkManager.all_news
-        // для удобства написания длинного текста создадим укороченную версию
-        //        let fromNews = networkManager.news_CD[indexPath.row]
-        //        cell.newsTitle =
-        //
-        //        //Заполяем все данные по ячейке
-        //        cell.newsTitle.text = fromNews.entity
-        //        // Если данных о количестве прочтений нет, то значит еще не читали ее, ставим 0
-        //        if let title = fromNews.title, let counter = networkManager.newsReadCounter[title] {
-        //            cell.newsReadCounter.text = "\(counter)"
-        //        } else {
-        //            cell.newsReadCounter.text = "0"
-        //        }
-        //        // Если у нас нет картинки, то поставим заглушку
-        //        if let url = fromNews.urlToImage, let imgData = networkManager.imagesForNews[url] {
-        //            cell.newsImage.image = UIImage(data: imgData)
-        //        }else {
-        //            cell.newsImage.image = UIImage(named: "noImg")
-        //        }
-        //
-        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailVC = DetailViewController()
+        // Закидываем новость в контроллер, разбираться будем в нем
+        detailVC.news = networkManager.fatchedNews[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let title = networkManager.fatchedNews[indexPath.row].title {
+            if News_counter.shared.counter[title] == nil {
+                News_counter.shared.counter[title] = 1
+            } else {
+                News_counter.shared.counter[title]! += 1
+            }
+        }
         
-        //        let detailVC = DetailViewController()
-        //        // Закидываем новость в контроллер, разбираться будем в нем
-        //        detailVC.news = networkManager.news[indexPath.row]
-        //
-        //        //Если картинки нет, то и не будем ее ставить, не хочу захломлять вид
-        //        if let imgData = networkManager.imagesForNews[detailVC.news!.urlToImage ?? ""] {
-        //            detailVC.image = UIImage(data: imgData)
-        //        }
-        //        //Если у нас есть уже счетчик, то прибавляем 1, если нет, то саписываем его
-        //        if let newsTitle = networkManager.news[indexPath.row].title {
-        //            if networkManager.newsReadCounter[newsTitle] != nil {
-        //                networkManager.newsReadCounter[newsTitle]! += 1
-        //            } else {
-        //                networkManager.newsReadCounter[newsTitle] = 1
-        //            }
-        //        }
-        //        networkManager.saveReadingCounter()
-        //        navigationController?.pushViewController(detailVC, animated: true)
-        //        tableView.reloadRows(at: [indexPath], with: .none)
+        navigationController?.pushViewController(detailVC, animated: true)
+        tableView.reloadData()
     }
-}
-
-extension MainViewController: UIScrollViewDelegate {
-    // создаем футер для таблички
-    func createSpinerFooter() -> UIView {
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 60))
-        let spiner = UIActivityIndicatorView()
-        spiner.center = footerView.center
-        footerView.addSubview(spiner)
-        spiner.startAnimating()
-        
-        return footerView
-    }
-    
-    //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    //        let position = scrollView.contentOffset.y
-    //        if position > tableView.contentSize.height + 100 - scrollView.frame.size.height  {
-    //            // если начинаем запрашивать данные, включаем спинер
-    //            self.tableView.tableFooterView = createSpinerFooter()
-    //            print("мы немного прокрутили список, нужно показать нижний футер")
-    //            networkManager.fetchNews(isPagination: true)
-    //
-    //        }
-    //    }
 }

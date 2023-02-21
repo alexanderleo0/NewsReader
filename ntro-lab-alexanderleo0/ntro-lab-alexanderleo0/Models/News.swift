@@ -8,22 +8,22 @@
 import Foundation
 import UIKit
 
-struct ListOfNews : Codable{
+struct ListOfNews : Decodable{
     let articles : [News]
 }
 
-class News : Codable {
+class News: Decodable {
 
-    let author : String?
-    let title : String?
-    let description : String?
-    let url : String?
-    let urlToImage: String?
-    let publishedAt : String?
-    let source: NewsSource
+    var title : String?
+    var description : String?
+    var url : String?
+    var urlToImage: String?
+    var publishedAt : Date?
+    var source: NewsSource?
+    var imageData: Data?
 }
 
-struct NewsSource: Codable {
+struct NewsSource: Decodable {
     let id : String?
     let name : String?
 }

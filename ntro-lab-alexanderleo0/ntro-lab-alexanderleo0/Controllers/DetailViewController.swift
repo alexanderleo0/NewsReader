@@ -19,7 +19,7 @@ class DetailViewController: UIViewController {
     
     var news : News?
     let webView = WKWebView()
-    var image: UIImage?
+//    var image: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,12 +28,22 @@ class DetailViewController: UIViewController {
         if let news = news{
             newsTitle.text = news.title
             newsDescription.text = news.description
-            publicationDate.text = news.publishedAt?.components(separatedBy: "T")[0]
-            publicationSource.text = news.source.name
+            
+            if let publishDate = news.publishedAt {
+                let dateFormatter = DateFormatter()
+//                dateFormatter.dateStyle = .full
+                dateFormatter.dateFormat = "yyyy-MM-dd'  'HH:mm:ss"
+                publicationDate.text = dateFormatter.string(from: publishDate)
+            }
+            
+            publicationSource.text = news.source?.name ?? ""
             urlButton.contentHorizontalAlignment = .left
             urlButton.setTitle(news.url, for: .normal)
+            if let img = news.imageData {
+                imageView.image = UIImage(data: img)
+            }
         }
-        imageView.image = image
+       
     }
     
     // Показываем ВебВью, если нажали на ссылку
@@ -44,21 +54,3 @@ class DetailViewController: UIViewController {
     }
 }
 
-
-// Создаем новый класс, что бы было удобно работать с картинками
-class ScaledHeightImageView: UIImageView {
-
-    override var intrinsicContentSize: CGSize {
-
-        if let myImage = image {
-            let myImageWidth = myImage.size.width
-            let myImageHeight = myImage.size.height
-            let myViewWidth = self.frame.size.width
-            let ratio = myViewWidth/myImageWidth
-            let scaledHeight = myImageHeight * ratio
-            return CGSize(width: myViewWidth, height: scaledHeight)
-        }
-        return CGSize(width: -1.0, height: -1.0)
-    }
-
-}

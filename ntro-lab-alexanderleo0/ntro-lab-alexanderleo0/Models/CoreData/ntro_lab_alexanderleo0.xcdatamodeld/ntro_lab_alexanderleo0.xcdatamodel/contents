@@ -5,8 +5,13 @@
         <attribute name="image" optional="YES" attributeType="Binary"/>
         <attribute name="publishedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="readCounter" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sourceID" optional="YES" attributeType="String"/>
+        <attribute name="sourceName" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="url" optional="YES" attributeType="String"/>
         <attribute name="urlToImage" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="SearchString" representedClassName="SearchString" syncable="YES" codeGenerationType="class">
+        <attribute name="searchStr" optional="YES" attributeType="String"/>
     </entity>
 </model>

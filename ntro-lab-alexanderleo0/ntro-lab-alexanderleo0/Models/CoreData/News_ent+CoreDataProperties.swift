@@ -23,7 +23,9 @@ extension News_ent {
     @NSManaged public var title: String?
     @NSManaged public var url: String?
     @NSManaged public var urlToImage: String?
-
+    @NSManaged public var sourceID: String?
+    @NSManaged public var sourceName: String?
+    
 }
 
 extension News_ent : Identifiable {
